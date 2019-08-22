@@ -8,8 +8,8 @@ Run the following commands to use these libraries:
 
 ```
 !git clone https://github.com/pren1/keras_transformer_import.git
-mv -v ./keras_transformer_import/* ./
-rm -r keras_transformer_import
+!mv -v ./keras_transformer_import/* ./
+!rm -r keras_transformer_import
 ```
 
 Then, just obtain the get_model func using:
