@@ -41,14 +41,15 @@ model = get_model(
     dropout_rate=0.05,
     embed_weights=np.random.random((13, 30)),
 )
-model.compile(
+parallel_model = tf.keras.utils.multi_gpu_model(model, gpus=None)
+parallel_model.compile(
     optimizer='adam',
     loss='sparse_categorical_crossentropy',
 )
-model.summary()
+parallel_model.summary()
 
 # Train the model
-model.fit(
+parallel_model.fit(
     x=[np.asarray(encoder_inputs * 1000), np.asarray(decoder_inputs * 1000)],
     y=np.asarray(decoder_outputs * 1000),
     epochs=5,
