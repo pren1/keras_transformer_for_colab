@@ -41,7 +41,7 @@ model = get_model(
     dropout_rate=0.05,
     embed_weights=np.random.random((13, 30)),
 )
-parallel_model = tf.keras.utils.multi_gpu_model(model, gpus=None)
+parallel_model = tensorflow.keras.utils.multi_gpu_model(model, gpus=None)
 parallel_model.compile(
     optimizer='adam',
     loss='sparse_categorical_crossentropy',
