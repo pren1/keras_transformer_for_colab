@@ -1,5 +1,6 @@
 import numpy as np
 from keras_transformer import get_model
+import tensorflow
 
 # Build a small toy token dictionary
 tokens = 'all work and no play makes jack a dull boy'.split(' ')
