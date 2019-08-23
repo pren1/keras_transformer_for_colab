@@ -545,8 +545,9 @@ def decode(model,
                 batch_inputs.append(tokens[i][:])
                 batch_outputs.append(decoder_inputs[i])
                 max_input_len = max(max_input_len, len(tokens[i]))
-        for i in range(len(batch_inputs)):
-            batch_inputs[i] += [pad_token] * (max_input_len - len(batch_inputs[i]))
+        'Do not use pad tokens here'
+        # for i in range(len(batch_inputs)):
+        #     batch_inputs[i] += [pad_token] * (max_input_len - len(batch_inputs[i]))
         predicts = model.predict([np.array(batch_inputs), np.array(batch_outputs)])
         for i in range(len(predicts)):
             if top_k == 1:
