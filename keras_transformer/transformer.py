@@ -476,11 +476,10 @@ def get_model(token_num,
         adapter_units=adapter_units,
         adapter_activation=adapter_activation,
     )
-    dense_layer_1 = keras.layers.TimeDistributed(keras.layers.Dense(embed_dim*4, activation='tanh'))
+    # dense_layer_1 = keras.layers.TimeDistributed(keras.layers.Dense(embed_dim*4, activation='tanh'))
     predicted_char_layer = keras.layers.TimeDistributed(keras.layers.Dense(decoder_token_num, activation='softmax', name='Output'))
-
-    dense_layer_output_1 = dense_layer_1(decoded_layer)
-    dense_layer = predicted_char_layer(dense_layer_output_1)
+    # dense_layer_output_1 = dense_layer_1(decoded_layer)
+    dense_layer = predicted_char_layer(decoded_layer)
     # dense_layer = EmbeddingSim(
     #     trainable=trainable,
     #     name='Output',
