@@ -23,7 +23,7 @@ class EmbeddingRet(keras.layers.Embedding):
     def call(self, inputs):
         return [
             super(EmbeddingRet, self).call(inputs),
-            self.embeddings,
+            tf.identity(self.embeddings),
         ]
 
 
