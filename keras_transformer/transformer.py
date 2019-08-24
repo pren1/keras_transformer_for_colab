@@ -3,7 +3,7 @@ from keras_layer_normalization.layer_normalization import LayerNormalization
 from keras_multi_head.multi_head_attention import MultiHeadAttention
 from keras_position_wise_feed_forward.feed_forward import FeedForward
 from keras_pos_embd.trig_pos_embd import TrigPosEmbedding
-# from keras_embed_sim.embeddings import EmbeddingRet, EmbeddingSim
+from keras_embed_sim.embeddings import EmbeddingRet, EmbeddingSim
 import pdb
 # from .backend import keras
 import tensorflow.keras as keras
