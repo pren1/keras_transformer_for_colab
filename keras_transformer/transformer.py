@@ -503,18 +503,86 @@ def _get_max_suffix_repeat_times(tokens, max_len):
     return max_repeat
 
 
+# def decode(model,
+#            tokens,
+#            start_token,
+#            end_token,
+#            pad_token,
+#            top_k=5,
+#            temperature=1.0,
+#            max_len=10,
+#            max_repeat=10,
+#            max_repeat_block=10):
+#     """Decode with the given model and input tokens.
+#
+#     :param model: The trained model.
+#     :param tokens: The input tokens of encoder.
+#     :param start_token: The token that represents the start of a sentence.
+#     :param end_token: The token that represents the end of a sentence.
+#     :param pad_token: The token that represents padding.
+#     :param top_k: Choose the last token from top K.
+#     :param temperature: Randomness in boltzmann distribution.
+#     :param max_len: Maximum length of decoded list.
+#     :param max_repeat: Maximum number of repeating blocks.
+#     :param max_repeat_block: Maximum length of the repeating block.
+#     :return: Decoded tokens.
+#     """
+#     is_single = not isinstance(tokens[0], list)
+#     if is_single:
+#         tokens = [tokens]
+#     batch_size = len(tokens)
+#     decoder_inputs = [[start_token] for _ in range(batch_size)]
+#     outputs = [None for _ in range(batch_size)]
+#     output_len = 1
+#     while len(list(filter(lambda x: x is None, outputs))) > 0:
+#         output_len += 1
+#         batch_inputs, batch_outputs = [], []
+#         max_input_len = 0
+#         index_map = {}
+#         for i in range(batch_size):
+#             if outputs[i] is None:
+#                 index_map[len(batch_inputs)] = i
+#                 batch_inputs.append(tokens[i][:])
+#                 batch_outputs.append(decoder_inputs[i])
+#                 max_input_len = max(max_input_len, len(tokens[i]))
+#         'Do not use pad tokens here'
+#         # for i in range(len(batch_inputs)):
+#         #     batch_inputs[i] += [pad_token] * (max_input_len - len(batch_inputs[i]))
+#         predicts = model.predict([np.array(batch_inputs), np.array(batch_outputs)])
+#         pdb.set_trace()
+#         for i in range(len(predicts)):
+#             if top_k == 1:
+#                 last_token = predicts[i][-1].argmax(axis=-1)
+#             else:
+#                 probs = [(prob, j) for j, prob in enumerate(predicts[i][-1])]
+#                 probs.sort(reverse=True)
+#                 probs = probs[:top_k]
+#                 indices, probs = list(map(lambda x: x[1], probs)), list(map(lambda x: x[0], probs))
+#                 probs = np.array(probs) / temperature
+#                 probs = probs - np.max(probs)
+#                 probs = np.exp(probs)
+#                 probs = probs / np.sum(probs)
+#                 last_token = np.random.choice(indices, p=probs)
+#             decoder_inputs[index_map[i]].append(last_token)
+#             if last_token == end_token or\
+#                     (max_len is not None and output_len >= max_len) or\
+#                     _get_max_suffix_repeat_times(decoder_inputs, max_repeat * max_repeat_block) >= max_repeat:
+#                 outputs[index_map[i]] = decoder_inputs[index_map[i]]
+#     if is_single:
+#         outputs = outputs[0]
+#     return outputs
+
 def decode(model,
            tokens,
            start_token,
            end_token,
            pad_token,
-           top_k=5,
+           top_k=1,
            temperature=1.0,
-           max_len=10,
+           max_len=10000,
            max_repeat=10,
            max_repeat_block=10):
     """Decode with the given model and input tokens.
-
     :param model: The trained model.
     :param tokens: The input tokens of encoder.
     :param start_token: The token that represents the start of a sentence.
@@ -545,11 +613,9 @@ def decode(model,
                 batch_inputs.append(tokens[i][:])
                 batch_outputs.append(decoder_inputs[i])
                 max_input_len = max(max_input_len, len(tokens[i]))
-        'Do not use pad tokens here'
-        # for i in range(len(batch_inputs)):
-        #     batch_inputs[i] += [pad_token] * (max_input_len - len(batch_inputs[i]))
+        for i in range(len(batch_inputs)):
+            batch_inputs[i] += [pad_token] * (max_input_len - len(batch_inputs[i]))
         predicts = model.predict([np.array(batch_inputs), np.array(batch_outputs)])
-        pdb.set_trace()
         for i in range(len(predicts)):
             if top_k == 1:
                 last_token = predicts[i][-1].argmax(axis=-1)
